@@ -1,0 +1,11 @@
+.local/
+usb-dumper/out/
+__pycache__/
+*.pyc
+x32-dump/
+*.img
+*.run
+*.update
+*.zip
+*.bak
+.DS_Store

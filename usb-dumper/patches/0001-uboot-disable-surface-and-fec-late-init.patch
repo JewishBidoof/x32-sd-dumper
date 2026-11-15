@@ -1,0 +1,51 @@
+--- a/board/freescale/mx25pdk/mx25pdk.c
++++ b/board/freescale/mx25pdk/mx25pdk.c
+@@ -45,7 +45,7 @@
+ #define I2C_PAD_CTRL		(PAD_CTL_HYS | PAD_CTL_PUS_100K_UP | \
+ 				 PAD_CTL_ODE)
+ 
+-static void mx25pdk_fec_init(void)
++static __maybe_unused void mx25pdk_fec_init(void)
+ {
+ 	static const iomux_v3_cfg_t fec_pads[] = {
+ 		MX25_PAD_FEC_TX_CLK__FEC_TX_CLK,
+@@ -352,7 +352,7 @@
+ #define TXTL		2  // reset default
+ #define RXTL		1  // reset default
+ 
+-static void surface_serial_init(void)
++static __maybe_unused void surface_serial_init(void)
+ {
+ 	writel(0, &mxc_uart_base_surface->cr1);
+ 	writel(0, &mxc_uart_base_surface->cr2);
+@@ -369,7 +369,7 @@
+ 	writel(0, &mxc_uart_base_surface->ts);
+ }
+ 
+-static void surface_serial_setbaudrate(unsigned long clk, unsigned long baudrate)
++static __maybe_unused void surface_serial_setbaudrate(unsigned long clk, unsigned long baudrate)
+ {
+ 	u32 tmp;
+ 
+@@ -526,21 +526,6 @@
+ 
+ int board_late_init(void)
+ {
+-	mx25pdk_fec_init();
+-	
+-	// init ttymxc1 (UART2) for surface-elements like LCDs, LEDs, faders and encoders
+-	surface_serial_init();
+-	u32 clk = imx_get_uartclk();
+-	surface_serial_setbaudrate(clk, 115200);
+-
+-	// enable X32_LED_IN = 0x10
+-	surface_set_led(0x00, 0x10, true); // boardId, LED-index, state
+-
+-	// set first LCD on board 0 and display text "OpenX32! Booting"
+-	surface_set_brightness(8, 0xC0); // default brightness
+-	surface_set_contrast(8, 40); // default
+-	surface_set_lcd(8, 8, 0b00000111); // boardId=0=R, index=8=Mainfader, color (bit 0=R, 1=G, 2=B, 3=Inverted)
+-
+ 	return 0;
+ }
+ 
